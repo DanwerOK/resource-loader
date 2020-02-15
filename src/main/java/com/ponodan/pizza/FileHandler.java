@@ -1,5 +1,7 @@
 package com.ponodan.pizza;
 
+import com.ponodan.pizza.model.InputPizzasDTO;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,15 +34,13 @@ public class FileHandler {
     public static InputPizzasDTO transalteContentToDto(String content) {
         String[] contnentLines = content.split(LINE_SEPARATOR);
         int members = Integer.parseInt(contnentLines[0].split(WHITESPACE)[0]);
-        int types = Integer.parseInt(contnentLines[0].split(WHITESPACE)[1]);
-        List<Integer> slices = Arrays.stream(contnentLines[1].split(WHITESPACE))
+        int[] slices = Arrays.stream(contnentLines[1].split(WHITESPACE))
                 .map(Integer::valueOf)
-                .collect(Collectors.toList());
+                .mapToInt(x -> x).toArray();
         
         InputPizzasDTO inputPizzasDTO = new InputPizzasDTO();
-        inputPizzasDTO.setMembers(members);
-        inputPizzasDTO.setTypes(types);
-        inputPizzasDTO.setSlices(slices);
+        inputPizzasDTO.setLimit(members);
+        inputPizzasDTO.setElements(slices);
         return inputPizzasDTO;
     }
 

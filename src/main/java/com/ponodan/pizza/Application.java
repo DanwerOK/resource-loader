@@ -12,8 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Application {
-    
-    
     private static final Path srcOut = Paths.get("data/src.zip");
     private static final Path srcIn = Paths.get("src/main");
 
@@ -25,15 +23,11 @@ public class Application {
         for (int i = 0; i < args.length; i++) {
             String inputFilePath = args[i];
             String content = FileHandler.readContent(inputFilePath);
-
-
-            // TODO: Implement file processing
-            String result = inputPizzasDTO.toString();
-
             InputPizzasDTO input = FileHandler.transalteContentToDto(content);
-
-            OutputPizzaDTO output = new PizzaHandler().handle(input);
             
+            // TODO: Implement file processing
+            String result = input.toString();
+            OutputPizzaDTO output = new PizzaHandler().handle(input);
 
             String outputFilePath = inputFilePath + "_result.txt";
             FileHandler.writeContent(outputFilePath, result);
