@@ -25,12 +25,11 @@ public class Application {
             String content = FileHandler.readContent(inputFilePath);
             InputPizzasDTO input = FileHandler.transalteContentToDto(content);
             
-            // TODO: Implement file processing
-            String result = input.toString();
             OutputPizzaDTO output = new PizzaHandler().handle(input);
 
             String outputFilePath = inputFilePath + "_result.txt";
-            FileHandler.writeContent(outputFilePath, result);
+            String outputContent = FileHandler.transalteDtoToContent(output);
+            FileHandler.writeContent(outputFilePath, outputContent);
         }
 
         System.out.println("Done");

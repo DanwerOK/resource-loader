@@ -1,6 +1,7 @@
 package com.ponodan.pizza;
 
 import com.ponodan.pizza.model.InputPizzasDTO;
+import com.ponodan.pizza.model.OutputPizzaDTO;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -51,5 +52,14 @@ public class FileHandler {
             outputStream.write(contentInBytes);
             outputStream.flush();
         }
+    }
+
+    public static String transalteDtoToContent(OutputPizzaDTO output) {
+        StringBuilder stringBuilder = new StringBuilder(); 
+        stringBuilder.append(output.elementNumbers.size());
+        stringBuilder.append(LINE_SEPARATOR);
+        // FIXME: Required output via whitespaces
+        stringBuilder.append(output.elementNumbers);
+        return stringBuilder.toString();
     }
 }
