@@ -3,6 +3,9 @@ package com.ponodan.pizza.model;
 import java.util.List;
 
 public class OutputPizzaDTO {
-    int count;
-    List<Integer> elementNumbers;
+    public OutputPizzaDTO(List<Integer> elementNumbers) {
+        this.elementNumbers = elementNumbers;
+    }
+
+    public final List<Integer> elementNumbers;
 }
