@@ -1,6 +1,5 @@
 package com.ponodan.pizza;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,16 +12,24 @@ public class Application {
             File inputFile = ResourceReader.getFileByPath(inputFilePath);
             
             // TODO: Implement file processing
+            String result = "Test result";
+
             
-            OutputStream outputStream = new FileOutputStream(inputFile);
             String outputFilePath = inputFilePath + "_result.txt";
-            
-            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
             File outputFile = new File(outputFilePath);
             if (!outputFile.exists()) {
                 outputFile.createNewFile();
-            }            
+            }
+            
+            try (OutputStream outputStream = new FileOutputStream(outputFile)) {
+                byte[] contentInBytes = result.getBytes();
+
+                outputStream.write(contentInBytes);
+                outputStream.flush();
+            }
         }
+
+        System.out.println("Done");
     }
 }
 
