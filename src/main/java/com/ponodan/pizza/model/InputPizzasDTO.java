@@ -3,26 +3,14 @@ package com.ponodan.pizza.model;
 import java.util.Arrays;
 
 public class InputPizzasDTO {
-    int limit;
-    
-    int[] elements;
+    public final int limit;
+    public final int[] elements;
 
-    public int getLimit() {
-        return limit;
-    }
-
-    public void setLimit(int limit) {
+    public InputPizzasDTO(int limit, int[] elements) {
         this.limit = limit;
-    }
-
-    public int[] getElements() {
-        return elements;
-    }
-
-    public void setElements(int[] elements) {
         this.elements = elements;
     }
-
+    
     @Override
     public String toString() {
         return "InputPizzasDTO{" +

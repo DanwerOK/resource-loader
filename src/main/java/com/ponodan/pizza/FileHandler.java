@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class FileHandler {
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -38,10 +36,7 @@ public class FileHandler {
                 .map(Integer::valueOf)
                 .mapToInt(x -> x).toArray();
         
-        InputPizzasDTO inputPizzasDTO = new InputPizzasDTO();
-        inputPizzasDTO.setLimit(members);
-        inputPizzasDTO.setElements(slices);
-        return inputPizzasDTO;
+        return new InputPizzasDTO(members, slices);
     }
 
     public static void writeContent(String path, String content) throws IOException {
