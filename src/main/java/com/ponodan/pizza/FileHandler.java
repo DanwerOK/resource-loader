@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class FileHandler {
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -54,12 +55,19 @@ public class FileHandler {
         }
     }
 
+    public static String getOutputPathByInputPath(String inputPath) {
+        String inputFileExtension = inputPath.substring(inputPath.lastIndexOf("."));
+        return inputPath.replace(inputFileExtension, ".out");
+    }
+    
     public static String transalteDtoToContent(OutputPizzaDTO output) {
         StringBuilder stringBuilder = new StringBuilder(); 
         stringBuilder.append(output.elementNumbers.size());
         stringBuilder.append(LINE_SEPARATOR);
-        // FIXME: Required output via whitespaces
-        stringBuilder.append(output.elementNumbers);
+        String elementNumbers = output.elementNumbers.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(WHITESPACE));
+        stringBuilder.append(elementNumbers);
         return stringBuilder.toString();
     }
 }

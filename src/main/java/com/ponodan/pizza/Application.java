@@ -5,8 +5,6 @@ import com.ponodan.pizza.model.InputPizzasDTO;
 import com.ponodan.pizza.model.OutputPizzaDTO;
 import org.zeroturnaround.zip.ZipUtil;
 
-import com.ponodan.pizza.handler.PizzaHandler;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,15 +18,16 @@ public class Application {
     }
 
     public static void main(String[] args) throws IOException {
+        PizzaHandler pizzaHandler = new PizzaHandler();
         for (int i = 0; i < args.length; i++) {
             String inputFilePath = args[i];
             String content = FileHandler.readContent(inputFilePath);
             InputPizzasDTO input = FileHandler.transalteContentToDto(content);
             
-            OutputPizzaDTO output = new PizzaHandler().handle(input);
+            OutputPizzaDTO output = pizzaHandler.handle(input);
 
-            String outputFilePath = inputFilePath + "_result.txt";
             String outputContent = FileHandler.transalteDtoToContent(output);
+            String outputFilePath = FileHandler.getOutputPathByInputPath(inputFilePath);
             FileHandler.writeContent(outputFilePath, outputContent);
         }
 
