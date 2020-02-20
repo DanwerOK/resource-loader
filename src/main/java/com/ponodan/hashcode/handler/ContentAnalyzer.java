@@ -10,6 +10,6 @@ public class ContentAnalyzer {
     SearchAlgorithm optimalSearch = new OptimalSearchAlgorithm();
 
     public OutputDTO handle(InputDTO input) {
-        return fullSearch.calculate(input);
+        return optimalSearch.calculate(input);
     }
 }
