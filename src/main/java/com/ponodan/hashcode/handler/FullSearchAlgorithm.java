@@ -21,13 +21,13 @@ public class FullSearchAlgorithm implements SearchAlgorithm {
 
     private OutputDTO getOutputDTO(LinkedHashMap<Library, List<Book>> scannedBooks) {
         OutputDTO outputDTO = new OutputDTO();
-        outputDTO.processedLibrariesAmount = scannedBooks.size();
         List<LibraryScore> libraryScores = new ArrayList<>();
         for (Map.Entry<Library, List<Book>> entry : scannedBooks.entrySet()) {
             LibraryScore libraryScore = new LibraryScore();
             libraryScore.booksProcessedAmount = entry.getValue().size();
             libraryScore.library = entry.getKey();
             libraryScore.processedBooks = entry.getValue();
+            libraryScores.add(libraryScore);
         }
         outputDTO.libraryScores = libraryScores;
         return outputDTO;
