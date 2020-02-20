@@ -1,8 +1,8 @@
-package com.ponodan.pizza.handler;
+package com.ponodan.hashcode.handler;
 
 
-import com.ponodan.pizza.model.InputPizzasDTO;
-import com.ponodan.pizza.model.OutputPizzaDTO;
+import com.ponodan.hashcode.model.InputPizzasDTO;
+import com.ponodan.hashcode.model.OutputPizzaDTO;
 
 public class PizzaHandler {
 

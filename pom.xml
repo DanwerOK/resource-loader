@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.ponodan</groupId>
-    <artifactId>resource-loader</artifactId>
+    <artifactId>hashcode-2020</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
 
@@ -40,7 +40,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.ponodan.pizza-analyzer.Application</mainClass>
+                            <mainClass>com.ponodan.hashcode.Application</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

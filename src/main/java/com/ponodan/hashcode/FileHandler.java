@@ -1,7 +1,7 @@
-package com.ponodan.pizza;
+package com.ponodan.hashcode;
 
-import com.ponodan.pizza.model.InputPizzasDTO;
-import com.ponodan.pizza.model.OutputPizzaDTO;
+import com.ponodan.hashcode.model.InputPizzasDTO;
+import com.ponodan.hashcode.model.OutputPizzaDTO;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,11 +1,11 @@
-package com.ponodan.pizza.handler;
+package com.ponodan.hashcode.handler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ponodan.pizza.model.InputPizzasDTO;
+import com.ponodan.hashcode.model.InputPizzasDTO;
 
 public class FullSearchAlgorithm implements SearchAlgorithm {
     public List<Integer> calculate(InputPizzasDTO pizzas) {

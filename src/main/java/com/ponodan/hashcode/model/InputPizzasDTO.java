@@ -1,4 +1,4 @@
-package com.ponodan.pizza.model;
+package com.ponodan.hashcode.model;
 
 import java.util.Arrays;
 
