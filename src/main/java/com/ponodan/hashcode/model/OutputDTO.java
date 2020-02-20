@@ -4,5 +4,14 @@ import java.util.List;
 
 public class OutputDTO {
 
-    public List<Integer> elementNumbers;
+    public int processedLibrariesAmount;
+    List<LibraryScore> scores;
+
+
+    public class LibraryScore {
+        Library library;
+        int booksProcessedAmount;
+
+        List<Book> processedBooks;
+    }
 }
