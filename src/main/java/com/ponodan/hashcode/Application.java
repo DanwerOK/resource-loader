@@ -1,8 +1,8 @@
 package com.ponodan.hashcode;
 
-import com.ponodan.hashcode.model.InputPizzasDTO;
-import com.ponodan.hashcode.handler.PizzaHandler;
-import com.ponodan.hashcode.model.OutputPizzaDTO;
+import com.ponodan.hashcode.model.InputDTO;
+import com.ponodan.hashcode.handler.ContentAnalyzer;
+import com.ponodan.hashcode.model.OutputDTO;
 import org.zeroturnaround.zip.ZipUtil;
 
 import java.io.IOException;
@@ -16,13 +16,13 @@ public class Application {
     public static void main(String[] args) throws IOException {
         ZipUtil.pack(srcIn.toFile(), srcOut.toFile());
         
-        PizzaHandler pizzaHandler = new PizzaHandler();
+        ContentAnalyzer handler = new ContentAnalyzer();
         for (int i = 0; i < args.length; i++) {
             String inputFilePath = args[i];
             String content = FileHandler.readContent(inputFilePath);
-            InputPizzasDTO input = FileHandler.transalteContentToDto(content);
+            InputDTO input = FileHandler.transalteContentToDto(content);
             
-            OutputPizzaDTO output = pizzaHandler.handle(input);
+            OutputDTO output = handler.handle(input);
 
             String outputContent = FileHandler.transalteDtoToContent(output);
             String outputFilePath = FileHandler.getOutputPathByInputPath(inputFilePath);

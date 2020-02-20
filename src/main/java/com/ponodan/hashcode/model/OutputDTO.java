@@ -2,8 +2,8 @@ package com.ponodan.hashcode.model;
 
 import java.util.List;
 
-public class OutputPizzaDTO {
-    public OutputPizzaDTO(List<Integer> elementNumbers) {
+public class OutputDTO {
+    public OutputDTO(List<Integer> elementNumbers) {
         this.elementNumbers = elementNumbers;
     }
 

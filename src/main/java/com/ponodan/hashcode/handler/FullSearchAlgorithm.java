@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.ponodan.hashcode.model.InputPizzasDTO;
+import com.ponodan.hashcode.model.InputDTO;
 
 public class FullSearchAlgorithm implements SearchAlgorithm {
 
-    public List<Integer> calculate(InputPizzasDTO pizzas) {
+    public List<Integer> calculate(InputDTO pizzas) {
         int limit = pizzas.limit;
         int typesAmount = pizzas.elements.length;
         int[] typesArray = pizzas.elements;

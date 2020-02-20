@@ -2,11 +2,11 @@ package com.ponodan.hashcode.model;
 
 import java.util.Arrays;
 
-public class InputPizzasDTO {
+public class InputDTO {
     public final int limit;
     public final int[] elements;
 
-    public InputPizzasDTO(int limit, int[] elements) {
+    public InputDTO(int limit, int[] elements) {
         this.limit = limit;
         this.elements = elements;
     }

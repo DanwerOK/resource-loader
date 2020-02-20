@@ -1,7 +1,7 @@
 package com.ponodan.hashcode;
 
-import com.ponodan.hashcode.model.InputPizzasDTO;
-import com.ponodan.hashcode.model.OutputPizzaDTO;
+import com.ponodan.hashcode.model.InputDTO;
+import com.ponodan.hashcode.model.OutputDTO;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,14 +31,14 @@ public class FileHandler {
         return stringBuilder.toString();
     }
 
-    public static InputPizzasDTO transalteContentToDto(String content) {
+    public static InputDTO transalteContentToDto(String content) {
         String[] contnentLines = content.split(LINE_SEPARATOR);
         int members = Integer.parseInt(contnentLines[0].split(WHITESPACE)[0]);
         int[] slices = Arrays.stream(contnentLines[1].split(WHITESPACE))
                 .map(Integer::valueOf)
                 .mapToInt(x -> x).toArray();
         
-        return new InputPizzasDTO(members, slices);
+        return new InputDTO(members, slices);
     }
 
     public static void writeContent(String path, String content) throws IOException {
@@ -60,7 +60,7 @@ public class FileHandler {
         return inputPath.replace(inputFileExtension, ".out");
     }
     
-    public static String transalteDtoToContent(OutputPizzaDTO output) {
+    public static String transalteDtoToContent(OutputDTO output) {
         StringBuilder stringBuilder = new StringBuilder(); 
         stringBuilder.append(output.elementNumbers.size());
         stringBuilder.append(LINE_SEPARATOR);
