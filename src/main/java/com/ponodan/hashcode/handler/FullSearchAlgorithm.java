@@ -3,22 +3,36 @@ package com.ponodan.hashcode.handler;
 import com.ponodan.hashcode.model.Book;
 import com.ponodan.hashcode.model.InputDTO;
 import com.ponodan.hashcode.model.Library;
+import com.ponodan.hashcode.model.LibraryScore;
 import com.ponodan.hashcode.model.OutputDTO;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FullSearchAlgorithm implements SearchAlgorithm {
     @Override
     public OutputDTO calculate(InputDTO input) {
         List<Library> processedLibraries = getProcessedLibraries(input.scanDaysAmount, input.libraries);
-        HashMap<Library, List<Book>> scannedBooks = shipBooksForScan(processedLibraries, input.scanDaysAmount); 
-
-        
-        return new OutputDTO();
+        LinkedHashMap<Library, List<Book>> scannedBooks = shipBooksForScan(processedLibraries, input.scanDaysAmount);
+        return getOutputDTO(scannedBooks);
     }
-    
+
+    private OutputDTO getOutputDTO(LinkedHashMap<Library, List<Book>> scannedBooks) {
+        OutputDTO outputDTO = new OutputDTO();
+        outputDTO.processedLibrariesAmount = scannedBooks.size();
+        List<LibraryScore> libraryScores = new ArrayList<>();
+        for (Map.Entry<Library, List<Book>> entry : scannedBooks.entrySet()) {
+            LibraryScore libraryScore = new LibraryScore();
+            libraryScore.booksProcessedAmount = entry.getValue().size();
+            libraryScore.library = entry.getKey();
+            libraryScore.processedBooks = entry.getValue();
+        }
+        outputDTO.libraryScores = libraryScores;
+        return outputDTO;
+    }
+
     private List<Library> getProcessedLibraries(int scanDaysAmount, List<Library> libraries) {
         List<Library> processedLibraries = new ArrayList<>();
         int overallSignupDelay = 0;
@@ -31,14 +45,14 @@ public class FullSearchAlgorithm implements SearchAlgorithm {
         return processedLibraries;
     }
 
-    private HashMap<Library, List<Book>> shipBooksForScan(List<Library> libraries, int deadline) {
+    private LinkedHashMap<Library, List<Book>> shipBooksForScan(List<Library> libraries, int deadline) {
         List<Integer> signupDays = new ArrayList<>();
         int signupDelay = 0;
         for (Library library: libraries) {
             signupDays.add(signupDelay += library.signupDelay);
         }
 
-        HashMap<Library, List<Book>> scannedBooks = new HashMap<>();
+        LinkedHashMap<Library, List<Book>> scannedBooks = new LinkedHashMap<>();
         for (int i = 0; i < deadline; i++) {
             if (signupDays.contains(i-1)) {
                 int libraryIndex = signupDays.indexOf(i-1);
@@ -50,7 +64,7 @@ public class FullSearchAlgorithm implements SearchAlgorithm {
         return scannedBooks;
     }
 
-    private void scanBooks(int deadline, HashMap<Library, List<Book>> scannedBooks, int currentDate, Library library) {
+    private void scanBooks(int deadline, LinkedHashMap<Library, List<Book>> scannedBooks, int currentDate, Library library) {
         int canBeScannedTillDeadline = library.shipPerDay * (deadline - currentDate);
         int booksToScan = library.books.size() <= canBeScannedTillDeadline ? library.books.size() : canBeScannedTillDeadline;
         List<Book> sortedBooks = library.getSortedBooksByScore();
