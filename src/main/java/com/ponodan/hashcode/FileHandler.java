@@ -64,6 +64,7 @@ public class FileHandler {
         inputDTO.books = books;
 
         List<Library> libraries = new ArrayList<>();
+        int libraryId = 0;
         for (int i = 2; i < contnentLines.length; i=i+2) {
             if (contnentLines[i].length() == 0) {
                 break;
@@ -71,7 +72,7 @@ public class FileHandler {
 
             String[] libraryString = contnentLines[i].split(WHITESPACE);
             Library library = new Library();
-            library.id = i-2;
+            library.id = ++libraryId;
             library.booksAmount = Integer.parseInt(libraryString[0]);
             library.signupDelay = Integer.parseInt(libraryString[1]);
             library.shipPerDay = Integer.parseInt(libraryString[2]);
