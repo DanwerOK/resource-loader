@@ -8,7 +8,11 @@ import java.util.TreeMap;
 import com.ponodan.hashcode.model.InputDTO;
 
 public class FullSearchAlgorithm implements SearchAlgorithm {
-
+    @Override
+    public List<Integer> calculate(InputDTO pizzas) {
+        return null;
+    }
+/*
     public List<Integer> calculate(InputDTO pizzas) {
         int limit = pizzas.limit;
         int typesAmount = pizzas.elements.length;
@@ -36,5 +40,5 @@ public class FullSearchAlgorithm implements SearchAlgorithm {
     private int sum(List<Integer> list) {
        return list.stream().reduce(0, Integer::sum);
     }
-
+*/
 }
