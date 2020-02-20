@@ -1,44 +1,34 @@
 package com.ponodan.hashcode.handler;
 
+import com.ponodan.hashcode.model.InputDTO;
+import com.ponodan.hashcode.model.Library;
+import com.ponodan.hashcode.model.OutputDTO;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import com.ponodan.hashcode.model.InputDTO;
 
 public class FullSearchAlgorithm implements SearchAlgorithm {
     @Override
-    public List<Integer> calculate(InputDTO pizzas) {
-        return null;
-    }
-/*
-    public List<Integer> calculate(InputDTO pizzas) {
-        int limit = pizzas.limit;
-        int typesAmount = pizzas.elements.length;
-        int[] typesArray = pizzas.elements;
-        Map<Integer, List<Integer>> sumCombinationMap = new TreeMap<>();
-        for (int i = 1; i < Math.pow(2, typesAmount); i++) {
-            char[] binaryNumber = Integer.toBinaryString(i).toCharArray();
-            int currentBinaryPos = binaryNumber.length - 1;
-            List<Integer> result = new ArrayList<>();
-            for (int j = typesAmount - 1; j >= 0 && currentBinaryPos >= 0; j--, currentBinaryPos--) {
-                if (binaryNumber[currentBinaryPos] == 49) {
-                    if (sum(result) + typesArray[j] == limit){
-                        result.add(typesArray[j]);
-                        return result;
-                    } else if (sum(result) + typesArray[j] < limit){
-                        result.add(typesArray[j]);
-                    }
-                }
-            }
-            sumCombinationMap.put(sum(result), result);
+    public OutputDTO calculate(InputDTO input) {
+        List<Integer> processedLibraries = getProcessedLibraries(input.scanDaysAmount, input.libraries);
+
+        for (int i = 0; i < input.scanDaysAmount; i++) {
+            
         }
-       return sumCombinationMap.get(sumCombinationMap.keySet().toArray()[sumCombinationMap.size()-1]);
+        
+        
+        return new OutputDTO();
     }
 
-    private int sum(List<Integer> list) {
-       return list.stream().reduce(0, Integer::sum);
+    private List<Integer> getProcessedLibraries(int scanDaysAmount, List<Library> libraries) {
+        List<Integer> processedLibraries = new ArrayList<>();
+        int overallSignupDelay = 0;
+        for (Library library: libraries) {
+            if (overallSignupDelay < scanDaysAmount + overallSignupDelay) {
+                overallSignupDelay = overallSignupDelay + library.signupDelay;
+                processedLibraries.add(library.id);
+            }
+        }
+        return processedLibraries;
     }
-*/
 }

@@ -1,12 +1,12 @@
 package com.ponodan.hashcode.handler;
 
-import java.util.List;
 
 import com.ponodan.hashcode.model.InputDTO;
+import com.ponodan.hashcode.model.OutputDTO;
 
 public class OptimalSearchAlgorithm implements SearchAlgorithm {
     @Override
-    public List<Integer> calculate(InputDTO pizzas) {
-        return null;
+    public OutputDTO calculate(InputDTO pizzas) {
+        return new OutputDTO();
     }
 }

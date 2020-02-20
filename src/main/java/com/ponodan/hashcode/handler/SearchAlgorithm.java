@@ -1,9 +1,8 @@
 package com.ponodan.hashcode.handler;
 
-import java.util.List;
-
 import com.ponodan.hashcode.model.InputDTO;
+import com.ponodan.hashcode.model.OutputDTO;
 
 public interface SearchAlgorithm {
-    List<Integer> calculate(InputDTO pizzas);
+    OutputDTO calculate(InputDTO pizzas);
 }
