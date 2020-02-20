@@ -70,7 +70,7 @@ public class FileHandler {
 
             String[] libraryString = contnentLines[i].split(WHITESPACE);
             Library library = new Library();
-            library.id = i;
+            library.id = i-2;
             library.booksAmount = Integer.parseInt(libraryString[0]);
             library.signupDelay = Integer.parseInt(libraryString[1]);
             library.shipPerDay = Integer.parseInt(libraryString[2]);
