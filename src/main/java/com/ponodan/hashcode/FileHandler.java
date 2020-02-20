@@ -105,13 +105,6 @@ public class FileHandler {
     }
     
     public static String transalteDtoToContent(OutputDTO output) {
-        StringBuilder stringBuilder = new StringBuilder(); 
-        stringBuilder.append(output.elementNumbers.size());
-        stringBuilder.append(LINE_SEPARATOR);
-        String elementNumbers = output.elementNumbers.stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining(WHITESPACE));
-        stringBuilder.append(elementNumbers);
-        return stringBuilder.toString();
+        return output.toString();
     }
 }
