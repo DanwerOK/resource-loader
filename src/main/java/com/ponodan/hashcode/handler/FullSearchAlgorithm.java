@@ -38,7 +38,7 @@ public class FullSearchAlgorithm implements SearchAlgorithm {
         int overallSignupDelay = 0;
         for (Library library: libraries) {
             if (overallSignupDelay < scanDaysAmount + overallSignupDelay) {
-                overallSignupDelay = overallSignupDelay + library.signupDelay;
+                overallSignupDelay = overallSignupDelay + library.getSignupDelay();
                 processedLibraries.add(library);
             }
         }
@@ -49,7 +49,7 @@ public class FullSearchAlgorithm implements SearchAlgorithm {
         List<Integer> signupDays = new ArrayList<>();
         int signupDelay = 0;
         for (Library library: libraries) {
-            signupDays.add(signupDelay += library.signupDelay);
+            signupDays.add(signupDelay += library.getSignupDelay());
         }
 
         LinkedHashMap<Library, List<Book>> scannedBooks = new LinkedHashMap<>();
@@ -65,8 +65,8 @@ public class FullSearchAlgorithm implements SearchAlgorithm {
     }
 
     private void scanBooks(int deadline, LinkedHashMap<Library, List<Book>> scannedBooks, int currentDate, Library library) {
-        int canBeScannedTillDeadline = library.shipPerDay * (deadline - currentDate);
-        int booksToScan = library.books.size() <= canBeScannedTillDeadline ? library.books.size() : canBeScannedTillDeadline;
+        int canBeScannedTillDeadline = library.getShipPerDay() * (deadline - currentDate);
+        int booksToScan = Math.min(library.getBooks().size(), canBeScannedTillDeadline);
         List<Book> sortedBooks = library.getSortedBooksByScore();
         List<Book> processedBooks = new ArrayList<>();
         for (int j = 0; j < booksToScan; j++) {

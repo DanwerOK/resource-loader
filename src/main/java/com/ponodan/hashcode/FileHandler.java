@@ -1,12 +1,5 @@
 package com.ponodan.hashcode;
 
-import com.ponodan.hashcode.model.Book;
-import com.ponodan.hashcode.model.InputDTO;
-import com.ponodan.hashcode.model.Library;
-import com.ponodan.hashcode.model.LibraryScore;
-import com.ponodan.hashcode.model.OutputDTO;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,10 +14,16 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import com.ponodan.hashcode.model.Book;
+import com.ponodan.hashcode.model.InputDTO;
+import com.ponodan.hashcode.model.Library;
+import com.ponodan.hashcode.model.LibraryScore;
+import com.ponodan.hashcode.model.OutputDTO;
+
 public class FileHandler {
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
     private static final String WHITESPACE = " ";
-    
+
     public static String readContent(String path) throws IOException {
         File file = new File(path);
         FileInputStream fileInputStream = new FileInputStream(file);
@@ -43,7 +42,7 @@ public class FileHandler {
         String[] contnentLines = content.split(LINE_SEPARATOR);
 
         InputDTO inputDTO = new InputDTO();
-        
+
         String[] line1 = contnentLines[0].split(WHITESPACE);
         inputDTO.booksAmount = Integer.parseInt(line1[0]);
         inputDTO.librariesAmount = Integer.parseInt(line1[1]);
@@ -52,7 +51,7 @@ public class FileHandler {
         String[] line2 = contnentLines[1].split(WHITESPACE);
 
         HashMap<Integer, Book> books = new HashMap<>();
-        
+
         AtomicInteger index = new AtomicInteger(0);
         Arrays.stream(line2).forEach(el -> {
             int i = index.getAndIncrement();
@@ -65,23 +64,23 @@ public class FileHandler {
 
         List<Library> libraries = new ArrayList<>();
         int libraryId = 0;
-        for (int i = 2; i < contnentLines.length; i=i+2) {
+        for (int i = 2; i < contnentLines.length; i = i + 2) {
             if (contnentLines[i].length() == 0) {
                 break;
             }
 
             String[] libraryString = contnentLines[i].split(WHITESPACE);
-            Library library = new Library();
-            library.id = ++libraryId;
-            library.booksAmount = Integer.parseInt(libraryString[0]);
-            library.signupDelay = Integer.parseInt(libraryString[1]);
-            library.shipPerDay = Integer.parseInt(libraryString[2]);
-
-            List<Book> libraryBooks = Arrays.stream(contnentLines[i + 1].split(WHITESPACE)).map(Integer::parseInt).map(idx -> books.get(idx)).collect(Collectors.toList());
-            library.books = libraryBooks;
+            Library library = new Library(++libraryId,
+                                          Integer.parseInt(libraryString[0]),
+                                          Integer.parseInt(libraryString[1]),
+                                          Integer.parseInt(libraryString[2]),
+                                          Arrays.stream(contnentLines[i + 1].split(WHITESPACE))
+                                                  .map(Integer::parseInt)
+                                                  .map(books::get)
+                                                  .collect(Collectors.toList()));
             libraries.add(library);
         }
-        
+
         inputDTO.libraries = libraries;
 
         return inputDTO;
@@ -105,19 +104,19 @@ public class FileHandler {
         String inputFileExtension = inputPath.substring(inputPath.lastIndexOf("."));
         return inputPath.replace(inputFileExtension, ".out");
     }
-    
+
     public static String transalteDtoToContent(OutputDTO output) {
         List<LibraryScore> libraryScores = output.libraryScores;
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(libraryScores.size());
         for (LibraryScore libraryScore : libraryScores) {
             stringBuilder.append(LINE_SEPARATOR);
-            stringBuilder.append(libraryScore.library.id);
+            stringBuilder.append(libraryScore.library.getId());
             stringBuilder.append(WHITESPACE);
             stringBuilder.append(libraryScore.processedBooks.size());
             stringBuilder.append(LINE_SEPARATOR);
             String elementNumbers = libraryScore.processedBooks.stream()
-                    .map(book -> book.id)
+                    .map(book -> book.getId())
                     .map(String::valueOf)
                     .collect(Collectors.joining(WHITESPACE));
             stringBuilder.append(elementNumbers);

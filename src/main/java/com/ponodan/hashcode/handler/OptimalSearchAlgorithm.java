@@ -2,59 +2,95 @@ package com.ponodan.hashcode.handler;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.ponodan.hashcode.model.Book;
 import com.ponodan.hashcode.model.InputDTO;
 import com.ponodan.hashcode.model.Library;
+import com.ponodan.hashcode.model.LibraryScore;
 import com.ponodan.hashcode.model.OutputDTO;
 import com.ponodan.hashcode.util.Pair;
 
 public class OptimalSearchAlgorithm implements SearchAlgorithm {
 
+    private static final Logger LOGGER = Logger.getLogger(OptimalSearchAlgorithm.class.getCanonicalName());
+
     @Override
     public OutputDTO calculate(InputDTO task) {
         int delay = task.getScanDaysAmount();
 
-        List<Library> libraries = task.getLibraries();
-        List<Pair<Library, List<Book>>> result = new ArrayList<>();
-        process(result, delay, libraries);
-
-        return new OutputDTO();
-    }
-
-    private List<Pair<Library, List<Book>>> process(List<Pair<Library, List<Book>>> result,
-                                                    int delay,
-                                                    List<Library> list) {
-        ArrayList<Library> libraries = new ArrayList<>(list);
-        List<Book> processed = result.stream().map(Pair::getRight).flatMap(Collection::stream).collect(Collectors.toList());
-        Pair<Library, List<Book>> pair = findBest(libraries, delay, processed);
-        if (pair == null) {
-            return result;
+        List<Library> libraries = new ArrayList<>(task.getLibraries());
+        List<Pair<Library, List<Book>>> result = process(delay, libraries);
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info(String.format("Total score: %s", task.getBooks()
+                    .values()
+                    .stream()
+                    .filter(Book::isScanned)
+                    .mapToInt(Book::getScore)
+                    .sum()));
         }
-        result.add(pair);
-        libraries.remove(pair.getLeft());
-        int nextDelay = delay - pair.getLeft().getShipPerDay();
-        return process(result, nextDelay, libraries);
+        OutputDTO outputDTO = new OutputDTO();
+        outputDTO.libraryScores = result.stream()
+                .filter(el -> !el.getRight().isEmpty())
+                .map(el -> {
+                    LibraryScore libraryScore = new LibraryScore();
+                    libraryScore.processedBooks = el.getRight();
+                    libraryScore.library = el.getLeft();
+                    libraryScore.booksProcessedAmount = el.getRight().size();
+                    return libraryScore;
+                }).collect(Collectors.toList());
+        return outputDTO;
     }
 
-    private Pair<Library, List<Book>> findBest(List<Library> libraries, int delay, List<Book> processed) {
-        int bestPotentialScore = 0;
-        Pair<Library, List<Book>> bestLibrary = null;
-        for (Library library : libraries) {
-            if (bestLibrary == null) {
-                bestLibrary = new Pair<>(library, new ArrayList<>());
+    private List<Pair<Library, List<Book>>> process(int delay,
+                                                    List<Library> libraries) {
+        List<Pair<Library, List<Book>>> result = new ArrayList<>();
+        int processedBookSize = 0;
+        int nextDelay = delay;
+        do {
+            Pair<Library, List<Book>> pair = findBest(libraries, nextDelay);
+            if (pair.getLeft() == null) {
+                break;
             }
-            Pair<Integer, List<Book>> potentialScore = library.potentialScore(delay, processed);
+            result.add(pair);
+            List<Book> processedByBestLibrary = pair.getRight();
+            processedByBestLibrary.forEach(el -> el.setScanned(true));
+            processedBookSize += processedByBestLibrary.size();
+            libraries.remove(pair.getLeft());
+            nextDelay = nextDelay - pair.getLeft().getSignupDelay();
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, String.format("Days left: %s, Libraries left: %s, Processed books: %s.", nextDelay, libraries.size(), processedBookSize));
+            }
+        } while (nextDelay > 0 && !libraries.isEmpty());
+        return result;
+    }
+
+    private Pair<Library, List<Book>> findBest(List<Library> libraries, int delay) {
+        int bestPotentialScore = 0;
+        Library bestLibrary = null;
+        int processedBookAmount = 0;
+        for (Library library : libraries) {
+            Pair<Integer, Integer> potentialScore = library.potentialScore(delay);
             Integer potentialScoreLeft = potentialScore.getLeft();
             if (potentialScoreLeft > bestPotentialScore) {
                 bestPotentialScore = potentialScoreLeft;
-                bestLibrary = new Pair<>(library, potentialScore.getRight());
+                bestLibrary = library;
+                processedBookAmount = potentialScore.getRight();
             }
         }
-        return bestLibrary;
+        int finalProcessedBookAmount = processedBookAmount;
+        List<Book> processedBooks = Optional.ofNullable(bestLibrary)
+                .map(library -> library.getSortedBooksByScore().parallelStream()
+                        .filter(el -> !el.isScanned())
+                        .collect(Collectors.toList()))
+                .map(books -> books.subList(0, Math.min(finalProcessedBookAmount, books.size())))
+                .orElse(Collections.emptyList());
+        return new Pair<>(bestLibrary, processedBooks);
     }
 
 }
