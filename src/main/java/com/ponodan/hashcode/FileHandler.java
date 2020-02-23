@@ -28,12 +28,14 @@ public class FileHandler {
         File file = new File(path);
         FileInputStream fileInputStream = new FileInputStream(file);
         InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        StringBuilder stringBuilder = new StringBuilder();
-        String newLine;
-        while ((newLine = bufferedReader.readLine()) != null) {
-            stringBuilder.append(newLine);
-            stringBuilder.append(LINE_SEPARATOR);
+        StringBuilder stringBuilder;
+        try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+            stringBuilder = new StringBuilder();
+            String newLine;
+            while ((newLine = bufferedReader.readLine()) != null) {
+                stringBuilder.append(newLine);
+                stringBuilder.append(LINE_SEPARATOR);
+            }
         }
         return stringBuilder.toString();
     }
@@ -70,7 +72,7 @@ public class FileHandler {
             }
 
             String[] libraryString = contnentLines[i].split(WHITESPACE);
-            Library library = new Library(++libraryId,
+            Library library = new Library(libraryId++,
                                           Integer.parseInt(libraryString[0]),
                                           Integer.parseInt(libraryString[1]),
                                           Integer.parseInt(libraryString[2]),
@@ -116,7 +118,7 @@ public class FileHandler {
             stringBuilder.append(libraryScore.processedBooks.size());
             stringBuilder.append(LINE_SEPARATOR);
             String elementNumbers = libraryScore.processedBooks.stream()
-                    .map(book -> book.getId())
+                    .map(Book::getId)
                     .map(String::valueOf)
                     .collect(Collectors.joining(WHITESPACE));
             stringBuilder.append(elementNumbers);
