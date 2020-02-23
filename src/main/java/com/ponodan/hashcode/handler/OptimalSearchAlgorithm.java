@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.ponodan.hashcode.model.Book;
@@ -15,10 +13,12 @@ import com.ponodan.hashcode.model.Library;
 import com.ponodan.hashcode.model.LibraryScore;
 import com.ponodan.hashcode.model.OutputDTO;
 import com.ponodan.hashcode.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OptimalSearchAlgorithm implements SearchAlgorithm {
 
-    private static final Logger LOGGER = Logger.getLogger(OptimalSearchAlgorithm.class.getCanonicalName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(OptimalSearchAlgorithm.class);
 
     @Override
     public OutputDTO calculate(InputDTO task) {
@@ -26,7 +26,7 @@ public class OptimalSearchAlgorithm implements SearchAlgorithm {
 
         List<Library> libraries = new ArrayList<>(task.getLibraries());
         List<Pair<Library, List<Book>>> result = process(delay, libraries);
-        if (LOGGER.isLoggable(Level.INFO)) {
+        if (LOGGER.isInfoEnabled()) {
             LOGGER.info(String.format("Total score: %s", task.getBooks()
                     .values()
                     .stream()
@@ -63,8 +63,9 @@ public class OptimalSearchAlgorithm implements SearchAlgorithm {
             processedBookSize += processedByBestLibrary.size();
             libraries.remove(pair.getLeft());
             nextDelay = nextDelay - pair.getLeft().getSignupDelay();
-            if (LOGGER.isLoggable(Level.FINEST)) {
-                LOGGER.log(Level.FINEST, String.format("Days left: %s, Libraries left: %s, Processed books: %s.", nextDelay, libraries.size(), processedBookSize));
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(
+                        String.format("Days left: %s, Libraries left: %s, Processed books: %s.", nextDelay, libraries.size(), processedBookSize));
             }
         } while (nextDelay > 0 && !libraries.isEmpty());
         return result;

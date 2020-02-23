@@ -8,9 +8,13 @@ import java.util.logging.Logger;
 import com.ponodan.hashcode.handler.ContentAnalyzer;
 import com.ponodan.hashcode.model.InputDTO;
 import com.ponodan.hashcode.model.OutputDTO;
+import org.slf4j.LoggerFactory;
 import org.zeroturnaround.zip.ZipUtil;
 
 public class Application {
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Application.class);
+
     private static final Path srcOut = Paths.get("target/classes/src.zip");
     private static final Path srcIn = Paths.get("src/main");
 
@@ -29,7 +33,7 @@ public class Application {
             FileHandler.writeContent(outputFilePath, outputContent);
         }
 
-        Logger.getGlobal().info("Done");
+        LOGGER.info("Done");
     }
 }
 
