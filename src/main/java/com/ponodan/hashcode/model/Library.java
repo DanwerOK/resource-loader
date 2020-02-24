@@ -13,6 +13,7 @@ public class Library {
     private int shipPerDay;
     private List<Book> books;
     private List<Book> sortedBooksByScore;
+    private List<Book> sortedBooksByUsage;
 
     public Library(int id, int booksAmount, int signupDelay, int shipPerDay, List<Book> books) {
         this.id = id;
@@ -31,6 +32,15 @@ public class Library {
         return sortedBooksByScore;
     }
 
+    public List<Book> getSortedBooksByUsagePerScore() {
+        if (sortedBooksByScore == null) {
+            ArrayList<Book> books1 = new ArrayList<>(this.books);
+            books1.sort(Comparator.comparing(book -> -(book.getScore()/(double)book.getUsedTimes())));
+            this.sortedBooksByScore = books1;
+        }
+        return sortedBooksByScore;
+    }
+
     public Pair<Integer, Integer> potentialScore(int deadline) {
         int potentialBookAmount = (deadline - signupDelay) * shipPerDay;
         if (potentialBookAmount < 1) {
@@ -43,6 +53,24 @@ public class Library {
             Book book = sortedBooksByScore.get(i);
             if (!book.isScanned()) {
                 potentialLibraryScore += book.getScore();
+            }
+        }
+
+        return new Pair<>(potentialLibraryScore, potentialBookAmount);
+    }
+
+    public Pair<Double, Integer> potentialScoreByUsage(int deadline) {
+        int potentialBookAmount = (deadline - signupDelay) * shipPerDay;
+        if (potentialBookAmount < 1) {
+            return new Pair<>(0d, 0);
+        }
+
+        double potentialLibraryScore = 0;
+        List<Book> sortedBooksByScore = getSortedBooksByUsagePerScore();
+        for (int i = 0; i < sortedBooksByScore.size() && i < potentialBookAmount; i++) {
+            Book book = sortedBooksByScore.get(i);
+            if (!book.isScanned()) {
+                potentialLibraryScore += book.getScore() / (double) book.getUsedTimes();
             }
         }
 

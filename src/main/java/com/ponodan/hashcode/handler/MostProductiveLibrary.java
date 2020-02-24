@@ -69,10 +69,15 @@ public class MostProductiveLibrary implements SearchAlgorithm {
     private Pair<Library, List<Book>> findBest(List<Library> libraries, int delay) {
         Library bestLibrary = null;
         int processedBookAmount = 0;
+        double bestScore = 0;
         for (Library library : libraries) {
             int bookAmount = library.getShipPerDay() * (delay - library.getSignupDelay());
-            if (bookAmount > processedBookAmount) {
-                processedBookAmount = bookAmount;
+            Pair<Double, Integer> doubleIntegerPair = library.potentialScoreByUsage(delay);
+            int leftBookAmount = doubleIntegerPair.getRight();
+            int realBookAmount = Math.min(bookAmount, leftBookAmount);
+            if (realBookAmount > processedBookAmount && doubleIntegerPair.getLeft() > bestScore) {
+                bestScore = doubleIntegerPair.getLeft();
+                processedBookAmount = realBookAmount;
                 bestLibrary = library;
             }
         }
@@ -81,7 +86,7 @@ public class MostProductiveLibrary implements SearchAlgorithm {
         }
         int finalProcessedBookAmount = processedBookAmount;
         List<Book> processedBooks = Optional.ofNullable(bestLibrary)
-                .map(library -> library.getSortedBooksByScore().parallelStream()
+                .map(library -> library.getSortedBooksByUsagePerScore().parallelStream()
                         .filter(el -> !el.isScanned())
                         .collect(Collectors.toList()))
                 .map(books -> books.subList(0, Math.min(finalProcessedBookAmount, books.size())))
