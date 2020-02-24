@@ -76,6 +76,9 @@ public class OptimalSearchAlgorithm implements SearchAlgorithm {
                 processedBookAmount = potentialScore.getRight();
             }
         }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(String.format("Best potential score: %s.", bestPotentialScore));
+        }
         int finalProcessedBookAmount = processedBookAmount;
         List<Book> processedBooks = Optional.ofNullable(bestLibrary)
                 .map(library -> library.getSortedBooksByScore().parallelStream()

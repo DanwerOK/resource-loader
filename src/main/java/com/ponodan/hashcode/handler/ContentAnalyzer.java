@@ -23,11 +23,11 @@ public class ContentAnalyzer {
 
     public OutputDTO handle(InputDTO input) {
         OutputDTO outputDTO = optimalSearch.calculate(input);
-        printScore(outputDTO);
+        printScore(input, outputDTO);
         return outputDTO;
     }
 
-    private void printScore(OutputDTO outputDTO) {
+    private void printScore(InputDTO input, OutputDTO outputDTO) {
         Set<Book> processedBooks = outputDTO.libraryScores.stream()
                 .map(el -> el.processedBooks)
                 .flatMap(Collection::stream)
@@ -38,7 +38,7 @@ public class ContentAnalyzer {
                 .sum();
         totalScore += fileScore;
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info(String.format("File score: %s", fileScore));
+            LOGGER.info(String.format("File score: %s, Processed %s books of %s", fileScore, processedBooks.size(), input.booksAmount));
             LOGGER.info(String.format("Total score: %s", totalScore));
         }
     }
