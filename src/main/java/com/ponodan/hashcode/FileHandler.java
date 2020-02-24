@@ -79,6 +79,7 @@ public class FileHandler {
                                           Arrays.stream(contnentLines[i + 1].split(WHITESPACE))
                                                   .map(Integer::parseInt)
                                                   .map(books::get)
+                                                  .peek(Book::incrementUsage)
                                                   .collect(Collectors.toList()));
             libraries.add(library);
         }

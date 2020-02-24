@@ -26,14 +26,6 @@ public class OptimalSearchAlgorithm implements SearchAlgorithm {
 
         List<Library> libraries = new ArrayList<>(task.getLibraries());
         List<Pair<Library, List<Book>>> result = process(delay, libraries);
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info(String.format("Total score: %s", task.getBooks()
-                    .values()
-                    .stream()
-                    .filter(Book::isScanned)
-                    .mapToInt(Book::getScore)
-                    .sum()));
-        }
         OutputDTO outputDTO = new OutputDTO();
         outputDTO.libraryScores = result.stream()
                 .filter(el -> !el.getRight().isEmpty())
