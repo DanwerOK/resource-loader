@@ -20,9 +20,10 @@ public class ContentAnalyzer {
     SearchAlgorithm fullSearch = new FullSearchAlgorithm();
     SearchAlgorithm optimalSearch = new OptimalSearchAlgorithm();
     SearchAlgorithm walkThroughBooks = new WalkThroughBooks();
+    SearchAlgorithm mostProductiveLibrary = new MostProductiveLibrary();
 
     public OutputDTO handle(InputDTO input) {
-        OutputDTO outputDTO = optimalSearch.calculate(input);
+        OutputDTO outputDTO = mostProductiveLibrary.calculate(input);
         printScore(input, outputDTO);
         return outputDTO;
     }
